@@ -78,3 +78,5 @@ rm -rf $RPM_BUILD_ROOT
 %lang(tr) %{py_sitescriptdir}/Skype4Py/Languages/tr.py[co]
 # ???
 %lang(x1) %{py_sitescriptdir}/Skype4Py/Languages/x1.py[co]
+
+%{py_sitescriptdir}/Skype4Py-*.egg-info
