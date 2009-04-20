@@ -7,6 +7,7 @@ License:	BSD
 Group:		Development/Languages/Python
 Source0:	http://dl.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
 # Source0-md5:	13091fccca8160e3e51ec064f42c82fd
+Source1:	%{name}-chat.py
 URL:		https://developer.skype.com/wiki/Skype4Py
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
@@ -22,6 +23,7 @@ Skype4COM's API in a pythonic way.
 
 %prep
 %setup -q -n Skype4Py-%{version}
+cp %{SOURCE1} chat.py
 
 %build
 %{__python} setup.py build
@@ -40,7 +42,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc LICENSE
+%doc LICENSE chat.py
 %dir %{py_sitescriptdir}/Skype4Py
 %{py_sitescriptdir}/Skype4Py/*.py[co]
 %dir %{py_sitescriptdir}/Skype4Py/API
