@@ -2,7 +2,7 @@
 Summary:	Python wrapper for the Skype API
 Name:		python-%{module}
 Version:	1.0.31.0
-Release:	0.1
+Release:	1
 License:	BSD
 Group:		Development/Languages/Python
 Source0:	http://dl.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
@@ -23,7 +23,7 @@ Skype4COM's API in a pythonic way.
 
 %prep
 %setup -q -n Skype4Py-%{version}
-cp %{SOURCE1} chat.py
+cp -a %{SOURCE1} chat.py
 
 %build
 %{__python} setup.py build
@@ -36,6 +36,9 @@ rm -rf $RPM_BUILD_ROOT
 %py_ocomp $RPM_BUILD_ROOT%{py_sitescriptdir}
 %py_comp $RPM_BUILD_ROOT%{py_sitescriptdir}
 %py_postclean
+
+# ???
+rm -f $RPM_BUILD_ROOT%{py_sitescriptdir}/Skype4Py/Languages/x1.py[co]
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -78,7 +81,5 @@ rm -rf $RPM_BUILD_ROOT
 %lang(ru) %{py_sitescriptdir}/Skype4Py/Languages/ru.py[co]
 %lang(sv) %{py_sitescriptdir}/Skype4Py/Languages/sv.py[co]
 %lang(tr) %{py_sitescriptdir}/Skype4Py/Languages/tr.py[co]
-# ???
-%lang(x1) %{py_sitescriptdir}/Skype4Py/Languages/x1.py[co]
 
 %{py_sitescriptdir}/Skype4Py-*.egg-info
