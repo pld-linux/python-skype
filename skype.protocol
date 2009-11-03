@@ -1,5 +1,5 @@
 [Protocol]
-exec=/home/glen/skype.py "%u"
+exec=/usr/share/skype/skype.py "%u"
 protocol=skype
 input=none
 output=none
