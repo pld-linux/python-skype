@@ -2,12 +2,14 @@
 Summary:	Python wrapper for the Skype API
 Name:		python-%{module}
 Version:	1.0.31.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Languages/Python
 Source0:	http://dl.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
 # Source0-md5:	13091fccca8160e3e51ec064f42c82fd
 Source1:	%{name}-chat.py
+Source2:	skype.protocol
+Source3:	skype.py
 URL:		https://developer.skype.com/wiki/Skype4Py
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
@@ -16,10 +18,21 @@ Requires:	python-modules >= 1:2.5
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		kde_servicesdir	%{_datadir}/services
+
 %description
 Skype4Py is a Python wrapper for the Skype API. It is platform
 independant, written completly in Python and reimplements the
 Skype4COM's API in a pythonic way.
+
+%package -n kde-protocol-skype
+Summary:	KDE3/KDE4 protocol handler
+Group:		Applications/Communications
+Requires:	python-skype
+Requires:	skype
+
+%description -n kde-protocol-skype
+KDE3/KDE4 "skype:" protocol handler.
 
 %prep
 %setup -q -n Skype4Py-%{version}
@@ -36,6 +49,10 @@ rm -rf $RPM_BUILD_ROOT
 %py_ocomp $RPM_BUILD_ROOT%{py_sitescriptdir}
 %py_comp $RPM_BUILD_ROOT%{py_sitescriptdir}
 %py_postclean
+
+install -d $RPM_BUILD_ROOT{%{kde_servicesdir},%{_datadir}/skype}
+cp -a %{SOURCE2} $RPM_BUILD_ROOT%{kde_servicesdir}
+install -p %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/skype
 
 # ???
 rm -f $RPM_BUILD_ROOT%{py_sitescriptdir}/Skype4Py/Languages/x1.py[co]
@@ -83,3 +100,8 @@ rm -rf $RPM_BUILD_ROOT
 %lang(tr) %{py_sitescriptdir}/Skype4Py/Languages/tr.py[co]
 
 %{py_sitescriptdir}/Skype4Py-*.egg-info
+
+%files -n kde-protocol-skype
+%defattr(644,root,root,755)
+%{kde_servicesdir}/skype.protocol
+%attr(755,root,root) %{_datadir}/skype/skype.py
