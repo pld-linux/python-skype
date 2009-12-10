@@ -16,7 +16,7 @@ except:
     sys.exit()
 
 # strip skype: prefix
-if CmdLine[:6] == "skype:":
+if CmdLine[:6] == 'skype:':
 	CmdLine = CmdLine[6:]
 
 # Creating Skype object and assigning event handlers..
@@ -24,23 +24,30 @@ skype = Skype4Py.Skype()
 
 # Starting Skype if it's not running already..
 if not skype.Client.IsRunning:
-    print 'Starting Skype..'
+    print 'Starting Skype...'
     skype.Client.Start()
 
 # Attatching to Skype..
-print 'Connecting to Skype..'
+print 'Connecting to Skype...'
 skype.Attach()
 
+# Parse: skype:?chat&blob=TZGEqhqepyo5Rvvw9kj_ZbbdbHIGqQWNDfh1e8f7IS6jZXgaqpJ9zqW_nXbqyHicAJQjTJLYRvz6vkRV7_kqYr6vhQq4kgBnKA
+if CmdLine[:11] == '?chat&blob=':
+    chat_id = CmdLine[11:]
+    print 'Opening chat with blob ' + chat_id + '...'
+    chat = skype.CreateChatUsingBlob(chat_id)
+    if chat.Topic:
+        print "Chat topic: %s" % chat.Topic
+    chat.OpenWindow()
+    sys.exit();
+
 # Checking if what we got from command line parameter is present in our contact list
-Found = False
 for F in skype.Friends:
     if F.Handle == CmdLine:
-        Found = True
-        print 'Chatting ' + F.Handle + '..'
-        chat = skype.CreateChatWith(CmdLine);
+        print 'Chatting ' + F.Handle + '...'
+        chat = skype.CreateChatWith(CmdLine)
         chat.OpenWindow()
-        break
+        sys.exit()
 
-if not Found:
-    print 'Call target not found in contact list'
-    sys.exit()
+print 'Call target [%s] not found in contact list' % CmdLine
+sys.exit()
