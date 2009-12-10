@@ -36,6 +36,7 @@ if CmdLine[:11] == '?chat&blob=':
     chat_id = CmdLine[11:]
     print 'Opening chat with blob ' + chat_id + '...'
     chat = skype.CreateChatUsingBlob(chat_id)
+    chat.Join();
     if chat.Topic:
         print "Chat topic: %s" % chat.Topic
     chat.OpenWindow()
