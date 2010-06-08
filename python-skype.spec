@@ -2,19 +2,21 @@
 Summary:	Python wrapper for the Skype API
 Name:		python-%{module}
 Version:	1.0.31.0
-Release:	3
+Release:	4
 License:	BSD
 Group:		Development/Languages/Python
-Source0:	http://dl.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
+Source0:	http://downloads.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
 # Source0-md5:	13091fccca8160e3e51ec064f42c82fd
 Source1:	%{name}-chat.py
 Source2:	skype.protocol
 Source3:	skype.py
+Source4:	skype.schemas
 URL:		https://developer.skype.com/wiki/Skype4Py
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
 Requires:	python-modules >= 1:2.5
+Requires:	skype-program
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -28,11 +30,18 @@ Skype4COM's API in a pythonic way.
 %package -n kde-protocol-skype
 Summary:	KDE3/KDE4 protocol handler
 Group:		Applications/Communications
-Requires:	python-skype
-Requires:	skype
+Requires:	%{name} = %{version}-%{release}
 
 %description -n kde-protocol-skype
 KDE3/KDE4 "skype:" protocol handler.
+
+%package -n gnome-urlhandler-skype
+Summary:	Gnome URL handler for "skype:" protocol
+Group:		Applications/Communications
+Requires:	%{name} = %{version}-%{release}
+
+%description -n gnome-urlhandler-skype
+Gnome URL handler for "skype:" protocol.
 
 %prep
 %setup -q -n Skype4Py-%{version}
@@ -50,15 +59,26 @@ rm -rf $RPM_BUILD_ROOT
 %py_comp $RPM_BUILD_ROOT%{py_sitescriptdir}
 %py_postclean
 
+# kde
 install -d $RPM_BUILD_ROOT{%{kde_servicesdir},%{_datadir}/skype}
 cp -a %{SOURCE2} $RPM_BUILD_ROOT%{kde_servicesdir}
 install -p %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/skype
+
+# gnome
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/gconf/schemas
+cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/gconf/schemas
 
 # ???
 rm -f $RPM_BUILD_ROOT%{py_sitescriptdir}/Skype4Py/Languages/x1.py[co]
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post -n gnome-urlhandler-skype
+%gconf_schema_install skype.schemas
+
+%preun -n gnome-urlhandler-skype
+%gconf_schema_uninstall skype.schemas
 
 %files
 %defattr(644,root,root,755)
@@ -101,7 +121,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %{py_sitescriptdir}/Skype4Py-*.egg-info
 
+# urlhandler
+%attr(755,root,root) %{_datadir}/skype/skype.py
+
 %files -n kde-protocol-skype
 %defattr(644,root,root,755)
 %{kde_servicesdir}/skype.protocol
-%attr(755,root,root) %{_datadir}/skype/skype.py
+
+%files -n gnome-urlhandler-skype
+%defattr(644,root,root,755)
+%{_sysconfdir}/gconf/schemas/skype.schemas
