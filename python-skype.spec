@@ -1,17 +1,17 @@
 %define 	module	skype
 Summary:	Python wrapper for the Skype API
 Name:		python-%{module}
-Version:	1.0.31.0
-Release:	5
+Version:	1.0.32.0
+Release:	1
 License:	BSD
 Group:		Development/Languages/Python
 Source0:	http://downloads.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
-# Source0-md5:	13091fccca8160e3e51ec064f42c82fd
+# Source0-md5:	0dc52c41b7f24815ff88d6af4c10de04
 Source1:	%{name}-chat.py
 Source2:	skype.protocol
 Source3:	skype.py
 Source4:	skype.schemas
-URL:		https://developer.skype.com/wiki/Skype4Py
+URL:		http://sourceforge.net/projects/skype4py/
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
@@ -44,8 +44,13 @@ Requires:	%{name} = %{version}-%{release}
 Gnome URL handler for "skype:" protocol.
 
 %prep
-%setup -q -n Skype4Py-%{version}
-cp -a %{SOURCE1} chat.py
+%setup -q -n Skype4Py-%{version} -cT
+# workaround for stupid tarball lacking execute perms on dirs
+tar xzf %{SOURCE0}; chmod -R u+rwX .; mv Skype4Py-*/* .
+
+mv Skype4Py/LICENSE .
+
+cp -p %{SOURCE1} chat.py
 
 %build
 %{__python} setup.py build
@@ -61,15 +66,15 @@ rm -rf $RPM_BUILD_ROOT
 
 # kde
 install -d $RPM_BUILD_ROOT{%{kde_servicesdir},%{_datadir}/skype}
-cp -a %{SOURCE2} $RPM_BUILD_ROOT%{kde_servicesdir}
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{kde_servicesdir}
 install -p %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/skype
 
 # gnome
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/gconf/schemas
-cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/gconf/schemas
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/gconf/schemas
 
 # ???
-rm -f $RPM_BUILD_ROOT%{py_sitescriptdir}/Skype4Py/Languages/x1.py[co]
+rm -f $RPM_BUILD_ROOT%{py_sitescriptdir}/Skype4Py/lang/x1.py[co]
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -85,39 +90,39 @@ rm -rf $RPM_BUILD_ROOT
 %doc LICENSE chat.py
 %dir %{py_sitescriptdir}/Skype4Py
 %{py_sitescriptdir}/Skype4Py/*.py[co]
-%dir %{py_sitescriptdir}/Skype4Py/API
-%{py_sitescriptdir}/Skype4Py/API/*.py[co]
-%dir %{py_sitescriptdir}/Skype4Py/Languages
-%{py_sitescriptdir}/Skype4Py/Languages/__init__.py[co]
+%dir %{py_sitescriptdir}/Skype4Py/api
+%{py_sitescriptdir}/Skype4Py/api/*.py[co]
+%dir %{py_sitescriptdir}/Skype4Py/lang
+%{py_sitescriptdir}/Skype4Py/lang/__init__.py[co]
 
-%lang(ar) %{py_sitescriptdir}/Skype4Py/Languages/ar.py[co]
-%lang(bg) %{py_sitescriptdir}/Skype4Py/Languages/bg.py[co]
-%lang(cs) %{py_sitescriptdir}/Skype4Py/Languages/cs.py[co]
-%lang(cz) %{py_sitescriptdir}/Skype4Py/Languages/cz.py[co]
-%lang(da) %{py_sitescriptdir}/Skype4Py/Languages/da.py[co]
-%lang(de) %{py_sitescriptdir}/Skype4Py/Languages/de.py[co]
-%lang(el) %{py_sitescriptdir}/Skype4Py/Languages/el.py[co]
-%lang(en) %{py_sitescriptdir}/Skype4Py/Languages/en.py[co]
-%lang(es) %{py_sitescriptdir}/Skype4Py/Languages/es.py[co]
-%lang(et) %{py_sitescriptdir}/Skype4Py/Languages/et.py[co]
-%lang(fi) %{py_sitescriptdir}/Skype4Py/Languages/fi.py[co]
-%lang(fr) %{py_sitescriptdir}/Skype4Py/Languages/fr.py[co]
-%lang(he) %{py_sitescriptdir}/Skype4Py/Languages/he.py[co]
-%lang(hu) %{py_sitescriptdir}/Skype4Py/Languages/hu.py[co]
-%lang(it) %{py_sitescriptdir}/Skype4Py/Languages/it.py[co]
-%lang(ja) %{py_sitescriptdir}/Skype4Py/Languages/ja.py[co]
-%lang(ko) %{py_sitescriptdir}/Skype4Py/Languages/ko.py[co]
-%lang(lt) %{py_sitescriptdir}/Skype4Py/Languages/lt.py[co]
-%lang(lv) %{py_sitescriptdir}/Skype4Py/Languages/lv.py[co]
-%lang(nl) %{py_sitescriptdir}/Skype4Py/Languages/nl.py[co]
-%lang(no) %{py_sitescriptdir}/Skype4Py/Languages/no.py[co]
-%lang(pl) %{py_sitescriptdir}/Skype4Py/Languages/pl.py[co]
-%lang(pp) %{py_sitescriptdir}/Skype4Py/Languages/pp.py[co]
-%lang(pt) %{py_sitescriptdir}/Skype4Py/Languages/pt.py[co]
-%lang(ro) %{py_sitescriptdir}/Skype4Py/Languages/ro.py[co]
-%lang(ru) %{py_sitescriptdir}/Skype4Py/Languages/ru.py[co]
-%lang(sv) %{py_sitescriptdir}/Skype4Py/Languages/sv.py[co]
-%lang(tr) %{py_sitescriptdir}/Skype4Py/Languages/tr.py[co]
+%lang(ar) %{py_sitescriptdir}/Skype4Py/lang/ar.py[co]
+%lang(bg) %{py_sitescriptdir}/Skype4Py/lang/bg.py[co]
+%lang(cs) %{py_sitescriptdir}/Skype4Py/lang/cs.py[co]
+%lang(cz) %{py_sitescriptdir}/Skype4Py/lang/cz.py[co]
+%lang(da) %{py_sitescriptdir}/Skype4Py/lang/da.py[co]
+%lang(de) %{py_sitescriptdir}/Skype4Py/lang/de.py[co]
+%lang(el) %{py_sitescriptdir}/Skype4Py/lang/el.py[co]
+%lang(en) %{py_sitescriptdir}/Skype4Py/lang/en.py[co]
+%lang(es) %{py_sitescriptdir}/Skype4Py/lang/es.py[co]
+%lang(et) %{py_sitescriptdir}/Skype4Py/lang/et.py[co]
+%lang(fi) %{py_sitescriptdir}/Skype4Py/lang/fi.py[co]
+%lang(fr) %{py_sitescriptdir}/Skype4Py/lang/fr.py[co]
+%lang(he) %{py_sitescriptdir}/Skype4Py/lang/he.py[co]
+%lang(hu) %{py_sitescriptdir}/Skype4Py/lang/hu.py[co]
+%lang(it) %{py_sitescriptdir}/Skype4Py/lang/it.py[co]
+%lang(ja) %{py_sitescriptdir}/Skype4Py/lang/ja.py[co]
+%lang(ko) %{py_sitescriptdir}/Skype4Py/lang/ko.py[co]
+%lang(lt) %{py_sitescriptdir}/Skype4Py/lang/lt.py[co]
+%lang(lv) %{py_sitescriptdir}/Skype4Py/lang/lv.py[co]
+%lang(nl) %{py_sitescriptdir}/Skype4Py/lang/nl.py[co]
+%lang(no) %{py_sitescriptdir}/Skype4Py/lang/no.py[co]
+%lang(pl) %{py_sitescriptdir}/Skype4Py/lang/pl.py[co]
+%lang(pp) %{py_sitescriptdir}/Skype4Py/lang/pp.py[co]
+%lang(pt) %{py_sitescriptdir}/Skype4Py/lang/pt.py[co]
+%lang(ro) %{py_sitescriptdir}/Skype4Py/lang/ro.py[co]
+%lang(ru) %{py_sitescriptdir}/Skype4Py/lang/ru.py[co]
+%lang(sv) %{py_sitescriptdir}/Skype4Py/lang/sv.py[co]
+%lang(tr) %{py_sitescriptdir}/Skype4Py/lang/tr.py[co]
 
 %{py_sitescriptdir}/Skype4Py-*.egg-info
 
