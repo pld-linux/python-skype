@@ -2,7 +2,7 @@
 Summary:	Python wrapper for the Skype API
 Name:		python-%{module}
 Version:	1.0.32.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Languages/Python
 Source0:	http://downloads.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
@@ -14,7 +14,7 @@ Source4:	skype.schemas
 URL:		http://sourceforge.net/projects/skype4py/
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.219
+BuildRequires:	rpmbuild(macros) >= 1.553
 Requires:	python-modules >= 1:2.5
 Requires:	skype-program
 BuildArch:	noarch
@@ -25,7 +25,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Skype4Py is a Python wrapper for the Skype API. It is platform
 independant, written completly in Python and reimplements the
-Skype4COM's API in a pythonic way.
+Skype4COM's API in a Pythonic way.
 
 %package -n kde-protocol-skype
 Summary:	KDE3/KDE4 protocol handler
@@ -48,9 +48,11 @@ Gnome URL handler for "skype:" protocol.
 # workaround for stupid tarball lacking execute perms on dirs
 tar xzf %{SOURCE0}; chmod -R u+rwX .; mv Skype4Py-*/* .
 
+%undos examples/*.py
+
 mv Skype4Py/LICENSE .
 
-cp -p %{SOURCE1} chat.py
+cp -p %{SOURCE1} examples/chat.py
 
 %build
 %{__python} setup.py build
@@ -63,6 +65,10 @@ rm -rf $RPM_BUILD_ROOT
 %py_ocomp $RPM_BUILD_ROOT%{py_sitescriptdir}
 %py_comp $RPM_BUILD_ROOT%{py_sitescriptdir}
 %py_postclean
+
+# demo
+install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+cp -a examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 # kde
 install -d $RPM_BUILD_ROOT{%{kde_servicesdir},%{_datadir}/skype}
@@ -87,7 +93,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc LICENSE chat.py
+%doc README LICENSE ChangeLog
 %dir %{py_sitescriptdir}/Skype4Py
 %{py_sitescriptdir}/Skype4Py/*.py[co]
 %dir %{py_sitescriptdir}/Skype4Py/api
@@ -125,6 +131,8 @@ rm -rf $RPM_BUILD_ROOT
 %lang(tr) %{py_sitescriptdir}/Skype4Py/lang/tr.py[co]
 
 %{py_sitescriptdir}/Skype4Py-*.egg-info
+
+%{_examplesdir}/%{name}-%{version}
 
 # urlhandler
 %attr(755,root,root) %{_datadir}/skype/skype.py
