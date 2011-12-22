@@ -2,7 +2,7 @@
 Summary:	Python wrapper for the Skype API
 Name:		python-%{module}
 Version:	1.0.32.0
-Release:	2
+Release:	3
 License:	BSD
 Group:		Development/Languages/Python
 Source0:	http://downloads.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
@@ -53,6 +53,12 @@ tar xzf %{SOURCE0}; chmod -R u+rwX .; mv Skype4Py-*/* .
 mv Skype4Py/LICENSE .
 
 cp -p %{SOURCE1} examples/chat.py
+
+# wrap each language import so any language becames optional
+for lang in $(awk '/^import/{print $2}' Skype4Py/lang/__init__.py | sort -u); do
+	 printf "try:\n import $lang\nexcept ImportError:\n pass\n";
+done > lang.py
+cp -p lang.py Skype4Py/lang/__init__.py
 
 %build
 %{__python} setup.py build
