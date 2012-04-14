@@ -2,7 +2,7 @@
 Summary:	Python wrapper for the Skype API
 Name:		python-%{module}
 Version:	1.0.32.0
-Release:	3
+Release:	4
 License:	BSD
 Group:		Development/Languages/Python
 Source0:	http://downloads.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
@@ -11,6 +11,8 @@ Source1:	%{name}-chat.py
 Source2:	skype.protocol
 Source3:	skype.py
 Source4:	skype.schemas
+# http://skype4py.svn.sourceforge.net/viewvc/skype4py/Skype4Py/api/posix.py?view=patch&r1=277&r2=276&pathrev=277
+Patch0:		default-transport.patch
 URL:		http://sourceforge.net/projects/skype4py/
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
@@ -48,6 +50,7 @@ Gnome URL handler for "skype:" protocol.
 # workaround for stupid tarball lacking execute perms on dirs
 tar xzf %{SOURCE0}; chmod -R u+rwX .; mv Skype4Py-*/* .
 
+%patch -p0 -R
 %undos examples/*.py
 
 mv Skype4Py/LICENSE .

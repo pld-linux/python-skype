@@ -1,0 +1,34 @@
+restore default transport being X11, dbus crashes so randomly
+
+http://stackoverflow.com/questions/7827108/unexplained-segfault-in-python
+
+http://skype4py.svn.sourceforge.net/viewvc/skype4py?view=revision&revision=277
+http://skype4py.svn.sourceforge.net/viewvc/skype4py/Skype4Py/api/posix.py?r1=277&r2=276&pathrev=277
+http://skype4py.svn.sourceforge.net/viewvc/skype4py/Skype4Py/api/posix.py?view=patch&r1=277&r2=276&pathrev=277
+
+it could be also be python 2.6+ related:
+https://github.com/stigkj/Skype4Py/commit/431b3cee9b3ab72138af69f2ccef2aff0002deda.patch
+
+--- Skype4Py/api/posix.py	2009/09/24 14:59:43	276
++++ Skype4Py/api/posix.py	2009/09/26 12:21:04	277
+@@ -28,19 +28,8 @@
+ __all__ = ['SkypeAPI']
+ 
+ 
+-# the posix_x11 module has to be imported as soon as possible so it can initialize
+-# the X11 library; without this extra import it would be loaded during first Skype
+-# object instantiation; any possible exceptions are ignored because the module is
+-# not really needed at this point and the errors will be reported anyway during
+-# Skype object instantiation
+-try:
+-    import posix_x11
+-except:
+-    pass
+-
+-
+ def SkypeAPI(opts):
+-    trans = opts.pop('Transport', 'x11')
++    trans = opts.pop('Transport', 'dbus')
+     if trans == 'dbus':
+         from posix_dbus import SkypeAPI
+     elif trans == 'x11':
