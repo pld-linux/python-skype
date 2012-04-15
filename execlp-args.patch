@@ -1,0 +1,28 @@
+os.execlp() needs at least two args:
+
+Python 2.7.2 (default, Aug 16 2011, 10:09:58)
+[GCC 4.6.1 20110714 (release)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import os
+>>> os.execlp('skype')
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/share/python2.7/os.py", line 327, in execlp
+  File "/usr/share/python2.7/os.py", line 344, in execvp
+  File "/usr/share/python2.7/os.py", line 380, in _execvpe
+ValueError: execv() arg 2 must not be empty
+>>> os.execlp('skype', 'skype')
+
+-> OK
+
+--- Skype4Py-1.0.32.0/Skype4Py/api/posix_x11.py~	2009-09-26 15:19:37.000000000 +0300
++++ Skype4Py-1.0.32.0/Skype4Py/api/posix_x11.py	2012-04-15 04:19:47.316670442 +0300
+@@ -400,7 +400,7 @@
+         if not self.is_running():
+             if os.fork() == 0: # we're the child
+                 os.setsid()
+-                os.execlp('skype')
++                os.execlp('skype', 'skype')
+ 
+     def shutdown(self):
+         from signal import SIGINT
