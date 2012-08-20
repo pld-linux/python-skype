@@ -1,12 +1,13 @@
 %define 	module	skype
 Summary:	Python wrapper for the Skype API
 Name:		python-%{module}
-Version:	1.0.32.0
-Release:	6
+Version:	1.0.32.1
+Release:	1
 License:	BSD
 Group:		Development/Languages/Python
-Source0:	http://downloads.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
-# Source0-md5:	0dc52c41b7f24815ff88d6af4c10de04
+#Source0:	http://downloads.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
+Source0:	https://github.com/glensc/skype4py/tarball/master/Skype4Py-%{version}.tar.gz
+# Source0-md5:	a31d4e99cd184ce916345f422d73b310
 Source1:	%{name}-chat.py
 Source2:	skype.protocol
 Source3:	skype.py
@@ -48,13 +49,12 @@ Requires:	%{name} = %{version}-%{release}
 Gnome URL handler for "skype:" protocol.
 
 %prep
-%setup -q -n Skype4Py-%{version} -cT
-# workaround for stupid tarball lacking execute perms on dirs
-tar xzf %{SOURCE0}; chmod -R u+rwX .; mv Skype4Py-*/* .
+%setup -q -n Skype4Py-%{version} -c
+mv *-skype4py-*/* .
 
 %patch0 -p0 -R
 %patch1 -p1
-%undos examples/*.py
+%undos -f py
 
 mv Skype4Py/LICENSE .
 
