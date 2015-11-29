@@ -18,7 +18,7 @@ Patch1:		execlp-args.patch
 URL:		http://sourceforge.net/projects/skype4py/
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.553
+BuildRequires:	rpmbuild(macros) >= 1.710
 Requires:	python-modules >= 1:2.5
 Requires:	skype-program
 Suggests:	python-dbus
