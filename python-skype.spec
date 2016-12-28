@@ -2,7 +2,7 @@
 Summary:	Python wrapper for the Skype API
 Name:		python-%{module}
 Version:	1.0.32.1
-Release:	4
+Release:	5
 License:	BSD
 Group:		Development/Languages/Python
 #Source0:	http://downloads.sourceforge.net/skype4py/Skype4Py-%{version}.tar.gz
