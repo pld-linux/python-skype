@@ -52,8 +52,8 @@ Gnome URL handler for "skype:" protocol.
 %setup -q -n Skype4Py-%{version} -c
 mv *-skype4py-*/* .
 
-%patch0 -p0 -R
-%patch1 -p1
+%patch -P0 -p0 -R
+%patch -P1 -p1
 %undos -f py
 
 mv Skype4Py/LICENSE .
